@@ -64,7 +64,7 @@ func PutRecord(id string) (err error) {
 	}
 	defer res.Body.Close()
 
-	if res.StatusCode != 200 {
+	if res.StatusCode != 204 {
 		err = common.ErrorNotFound
 	}
 	return
@@ -74,14 +74,7 @@ func main() {
 	start := time.Now()
 	var countPass int
 	var countFail int
-	// for i := 1; i <= 1000; i++ {
 
-	// 	if _, err := GetRecord("1"); err != nil {
-	// 		countFail++
-	// 	} else {
-	// 		countPass++
-	// 	}
-	// }
 	for i := 1; i <= 1000; i++ {
 
 		if err := PutRecord("1"); err != nil {
@@ -91,6 +84,21 @@ func main() {
 		}
 	}
 	t := time.Since(start)
+	log.Println("Success: ", countPass)
+	log.Println("Fail: ", countFail)
+	log.Println(t)
+	log.Println("TPS: ", float64(1000)*float64(time.Second)/float64(t))
+	start = time.Now()
+	countPass = 0
+	countFail = 0
+	for i := 1; i <= 1000; i++ {
+
+		if _, err := GetRecord("1"); err != nil {
+			countFail++
+		} else {
+			countPass++
+		}
+	}
 	log.Println("Success: ", countPass)
 	log.Println("Fail: ", countFail)
 	log.Println(t)
