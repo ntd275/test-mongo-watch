@@ -37,8 +37,19 @@ func GetRecord(id string) (res models.Record, err error) {
 
 func main() {
 	start := time.Now()
+	var countPass int
+	var countFail int
 	for i := 1; i <= 1000; i++ {
-		GetRecord("1")
+
+		if _, err := GetRecord("1"); err != nil {
+			countFail++
+		} else {
+			countPass++
+		}
 	}
-	log.Println(time.Since(start))
+	t := time.Since(start)
+	log.Println("Success: ", countPass)
+	log.Println("Fail: ", countFail)
+	log.Println(t)
+	log.Println("TPS: ", float64(1000)*float64(time.Second)/float64(t))
 }
