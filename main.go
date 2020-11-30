@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"client/common"
 	"client/models"
+	"encoding/json"
 	"log"
 	"net/http"
 	"time"
@@ -36,13 +38,53 @@ func GetRecord(id string) (res models.Record, err error) {
 	return
 }
 
+func PutRecord(id string) (err error) {
+	var record = models.Record{
+		Id:           id,
+		Data:         "abc",
+		LastModified: time.Now(),
+	}
+	recordJSON, err := json.Marshal(record)
+	if err != nil {
+		return
+	}
+
+	client := http.Client{
+		Timeout: 10 * time.Second,
+	}
+
+	request, err := http.NewRequest("PUT", dbServer+"/"+id, bytes.NewReader(recordJSON))
+	if err != nil {
+		return
+	}
+	res, err := client.Do(request)
+
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode != 200 {
+		err = common.ErrorNotFound
+	}
+	return
+}
+
 func main() {
 	start := time.Now()
 	var countPass int
 	var countFail int
+	// for i := 1; i <= 1000; i++ {
+
+	// 	if _, err := GetRecord("1"); err != nil {
+	// 		countFail++
+	// 	} else {
+	// 		countPass++
+	// 	}
+	// }
 	for i := 1; i <= 1000; i++ {
 
-		if _, err := GetRecord("1"); err != nil {
+		if err := PutRecord("1"); err != nil {
 			countFail++
 		} else {
 			countPass++
