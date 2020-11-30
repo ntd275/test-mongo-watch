@@ -99,7 +99,7 @@ func main() {
 			countPass++
 		}
 	}
-	t := time.Since(start)
+	t = time.Since(start)
 	log.Println("Success: ", countPass)
 	log.Println("Fail: ", countFail)
 	log.Println(t)
