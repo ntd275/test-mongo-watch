@@ -29,6 +29,7 @@ func GetRecord(id string) (res models.Record, err error) {
 	if err != nil {
 		return
 	}
+	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
 		err = common.ErrorNotFound
 	}
