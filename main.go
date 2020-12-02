@@ -14,6 +14,10 @@ var (
 	dbServer string
 )
 
+const (
+	NUM = 10000
+)
+
 func init() {
 	dbServer = common.GetEnv("DB_SERVER", "http://localhost:8080/api/v1")
 }
@@ -87,11 +91,11 @@ func main() {
 	log.Println("Success: ", countPass)
 	log.Println("Fail: ", countFail)
 	log.Println(t)
-	log.Println("TPS: ", float64(1000)*float64(time.Second)/float64(t))
+	log.Println("TPS: ", float64(NUM)*float64(time.Second)/float64(t))
 	start = time.Now()
 	countPass = 0
 	countFail = 0
-	for i := 1; i <= 1000; i++ {
+	for i := 1; i <= NUM; i++ {
 
 		if _, err := GetRecord("1"); err != nil {
 			countFail++
@@ -103,5 +107,21 @@ func main() {
 	log.Println("Success: ", countPass)
 	log.Println("Fail: ", countFail)
 	log.Println(t)
-	log.Println("TPS: ", float64(1000)*float64(time.Second)/float64(t))
+	log.Println("TPS: ", float64(NUM)*float64(time.Second)/float64(t))
+	start = time.Now()
+	countPass = 0
+	countFail = 0
+	for i := 1; i <= NUM; i++ {
+
+		if _, err := GetRecord("2"); err != nil {
+			countFail++
+		} else {
+			countPass++
+		}
+	}
+	t = time.Since(start)
+	log.Println("Success: ", countPass)
+	log.Println("Fail: ", countFail)
+	log.Println(t)
+	log.Println("TPS: ", float64(NUM)*float64(time.Second)/float64(t))
 }
