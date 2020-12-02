@@ -79,7 +79,7 @@ func main() {
 	var countPass int
 	var countFail int
 
-	for i := 1; i <= 1000; i++ {
+	for i := 1; i <= NUM; i++ {
 
 		if err := PutRecord("1"); err != nil {
 			countFail++
